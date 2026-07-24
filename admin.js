@@ -1,19 +1,22 @@
-// 관리자 이메일
 const adminEmail = "kwonjeonghyunkjh0218@gmail.com";
 
 
-// 관리자 인증 확인
+
+
+// 관리자 확인
 
 auth.onAuthStateChanged((user)=>{
 
 
     if(!user){
 
+
         alert("로그인이 필요합니다");
 
-        location.href = "login.html";
+        location.href="login.html";
 
         return;
+
 
     }
 
@@ -21,13 +24,21 @@ auth.onAuthStateChanged((user)=>{
 
     if(user.email !== adminEmail){
 
+
         alert("관리자 권한이 없습니다");
 
-        location.href = "index.html";
+        location.href="index.html";
 
         return;
 
+
     }
+
+
+
+    loadProducts();
+
+    loadOrders();
 
 
 
@@ -37,57 +48,63 @@ auth.onAuthStateChanged((user)=>{
 
 
 
-// 상품 추가
+
+
+
+
+// 상품 등록
 
 function addProduct(){
 
 
-    const name =
-    document.querySelector("#name").value;
+
+    const product = {
 
 
-    const price =
-    document.querySelector("#price").value;
+        name:
+        document.querySelector("#name").value,
 
 
-    const image =
-    document.querySelector("#image").value;
+        price:
+        Number(document.querySelector("#price").value),
 
 
-    const description =
-    document.querySelector("#description").value;
+        image:
+        document.querySelector("#image").value,
 
 
-    const size =
-    document.querySelector("#size").value;
+        brand:
+        document.querySelector("#brand").value,
 
 
-    const link =
-    document.querySelector("#link").value;
+        category:
+        document.querySelector("#category").value,
+
+
+        size:
+        document.querySelector("#size").value,
+
+
+        description:
+        document.querySelector("#description").value,
+
+
+        link:
+        document.querySelector("#link").value,
+
+
+        createdAt:new Date()
+
+
+    };
+
+
 
 
 
     db.collection("products")
-    .add({
 
-
-        name:name,
-
-        price:Number(price),
-
-        image:image,
-
-        description:description,
-
-        size:size,
-
-        link:link,
-
-        createdAt:
-        new Date()
-
-
-    })
+    .add(product)
 
     .then(()=>{
 
@@ -98,17 +115,6 @@ function addProduct(){
         location.reload();
 
 
-    })
-
-    .catch((error)=>{
-
-
-        console.log(error);
-
-
-        alert("등록 실패");
-
-
     });
 
 
@@ -120,36 +126,10 @@ function addProduct(){
 
 
 
-// 상품 삭제
-
-function deleteProduct(id){
-
-
-    db.collection("products")
-    .doc(id)
-    .delete()
-
-    .then(()=>{
-
-
-        alert("삭제 완료");
-
-
-        location.reload();
-
-
-    });
 
 
 
-}
-
-
-
-
-
-
-// 관리자 상품 목록 출력
+// 상품 불러오기
 
 function loadProducts(){
 
@@ -163,20 +143,26 @@ function loadProducts(){
 
 
 
-    list.innerHTML = "";
-
-
 
     db.collection("products")
+
     .get()
 
     .then((snapshot)=>{
 
 
+
+        list.innerHTML="";
+
+
+
+
         snapshot.forEach((doc)=>{
 
 
+
             let data = doc.data();
+
 
 
 
@@ -196,6 +182,7 @@ function loadProducts(){
             </h3>
 
 
+
             <p>
 
             ${data.price}원
@@ -204,11 +191,13 @@ function loadProducts(){
 
 
 
+
             <button onclick="deleteProduct('${doc.id}')">
 
             삭제
 
             </button>
+
 
 
             </div>
@@ -232,4 +221,248 @@ function loadProducts(){
 
 
 
-loadProducts();
+
+
+
+
+// 상품 삭제
+
+function deleteProduct(id){
+
+
+
+    db.collection("products")
+
+    .doc(id)
+
+    .delete()
+
+    .then(()=>{
+
+
+        alert("삭제 완료");
+
+
+        loadProducts();
+
+
+    });
+
+
+}
+
+
+
+
+
+
+
+
+
+// 주문 불러오기
+
+function loadOrders(){
+
+
+
+    const orders =
+    document.querySelector("#orders");
+
+
+
+    if(!orders) return;
+
+
+
+
+
+    db.collection("orders")
+
+    .orderBy("createdAt","desc")
+
+    .get()
+
+    .then((snapshot)=>{
+
+
+        orders.innerHTML="";
+
+
+
+
+        snapshot.forEach((doc)=>{
+
+
+            let data = doc.data();
+
+
+
+
+            orders.innerHTML += `
+
+
+
+            <div class="order-card">
+
+
+
+            <h3>
+
+            ${data.name}
+
+            </h3>
+
+
+
+            <p>
+
+            구매자:
+            ${data.user}
+
+            </p>
+
+
+
+
+            <p>
+
+            가격:
+            ${data.price}원
+
+            </p>
+
+
+
+
+            <p>
+
+            사이즈:
+            ${data.size}
+
+            </p>
+
+
+
+
+
+            <p>
+
+            상태:
+            ${data.status}
+
+            </p>
+
+
+
+
+
+            <button onclick="changeStatus('${doc.id}')">
+
+            배송완료 처리
+
+            </button>
+
+
+
+
+
+            <button onclick="deleteOrder('${doc.id}')">
+
+            주문 삭제
+
+            </button>
+
+
+
+
+            </div>
+
+
+
+            `;
+
+
+
+        });
+
+
+
+    });
+
+
+
+}
+
+
+
+
+
+
+
+
+
+// 주문 상태 변경
+
+function changeStatus(id){
+
+
+
+    db.collection("orders")
+
+    .doc(id)
+
+    .update({
+
+
+        status:"배송완료"
+
+
+    })
+
+    .then(()=>{
+
+
+        alert("상태 변경 완료");
+
+
+        loadOrders();
+
+
+    });
+
+
+
+}
+
+
+
+
+
+
+
+
+
+// 주문 삭제
+
+function deleteOrder(id){
+
+
+    db.collection("orders")
+
+    .doc(id)
+
+    .delete()
+
+    .then(()=>{
+
+
+        alert("주문 삭제 완료");
+
+
+        loadOrders();
+
+
+    });
+
+
+}
