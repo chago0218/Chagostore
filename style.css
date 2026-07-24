@@ -285,3 +285,13 @@ footer{
 .products .card {
     width: 100% !important;
 }
+.products{
+    display:flex !important;
+    flex-wrap:wrap !important;
+    gap:12px !important;
+    padding:12px !important;
+}
+
+.products .card{
+    width:calc(50% - 6px) !important;
+}
