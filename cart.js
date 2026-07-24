@@ -1,20 +1,9 @@
-const cartProducts =
-document.querySelector("#cartProducts");
+const cartProducts = document.querySelector("#cartProducts");
+const total = document.querySelector("#total");
 
 
-const total =
-document.querySelector("#total");
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-
-
-let cart =
-JSON.parse(localStorage.getItem("cart"))
-|| [];
-
-
-
-
-let sum = 0;
 
 
 
@@ -22,93 +11,152 @@ let sum = 0;
 function showCart(){
 
 
-cartProducts.innerHTML="";
+    cartProducts.innerHTML = "";
 
 
-sum=0;
-
-
-
-cart.forEach((item,index)=>{
-
-
-sum += Number(item.price);
+    let sum = 0;
 
 
 
-cartProducts.innerHTML += `
+    cart.forEach((item,index)=>{
 
 
-<div class="card">
+        let price = Number(item.price);
 
 
-<img src="${item.image || 
-'https://via.placeholder.com/300'}">
+        let count = item.count || 1;
 
 
-
-<div class="info">
-
-
-<h3>
-${item.name}
-</h3>
+        sum += price * count;
 
 
 
-<div class="price">
-
-${item.price}원
-
-</div>
+        cartProducts.innerHTML += `
 
 
+        <div class="card">
 
-<button class="buy"
-onclick="removeCart(${index})">
 
-삭제
-
-</button>
+            <img src="${item.image || 
+            'https://via.placeholder.com/300'}">
 
 
 
-</div>
+            <div class="info">
 
 
-</div>
+                <h3>
 
+                ${item.name}
 
-`;
-
-
-});
+                </h3>
 
 
 
-total.innerHTML=sum;
+                <div class="price">
+
+                ${price * count}원
+
+                </div>
+
+
+
+                <p>
+
+                사이즈:
+                ${item.selectedSize || ""}
+
+                </p>
+
+
+
+
+                <button onclick="changeCount(${index},-1)">
+                -
+                </button>
+
+
+                <span>
+
+                ${count}
+
+                </span>
+
+
+                <button onclick="changeCount(${index},1)">
+                +
+                </button>
+
+
+
+
+                <button class="buy"
+                onclick="removeCart(${index})">
+
+                삭제
+
+                </button>
+
+
+
+            </div>
+
+
+        </div>
+
+
+        `;
+
+
+    });
+
+
+
+    total.innerHTML = sum;
+
 
 
 }
 
 
 
+
+
+// 수량 변경
+
+function changeCount(index,value){
+
+
+    cart[index].count =
+    (cart[index].count || 1) + value;
+
+
+
+    if(cart[index].count <= 0){
+
+        cart[index].count = 1;
+
+    }
+
+
+
+    saveCart();
+
+}
+
+
+
+
+
+// 삭제
 
 function removeCart(index){
 
 
-cart.splice(index,1);
+    cart.splice(index,1);
 
 
-
-localStorage.setItem(
-"cart",
-JSON.stringify(cart)
-);
-
-
-
-showCart();
+    saveCart();
 
 
 }
@@ -116,28 +164,44 @@ showCart();
 
 
 
+// 저장
+
+function saveCart(){
+
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+
+    showCart();
+
+
+}
+
+
+
+
+
+// 구매
 
 function buyAll(){
 
 
-if(cart.length===0){
+    if(cart.length === 0){
 
-alert("장바구니가 비어있습니다");
+        alert("장바구니가 비어있습니다");
 
-return;
+        return;
 
-}
-
-
-
-alert("구매 페이지로 이동합니다");
+    }
 
 
-// 스마트스토어 링크 연결 예정
+    alert("구매 페이지로 이동합니다");
 
 
 }
-
 
 
 
