@@ -1,317 +1,80 @@
-const cartProducts = document.querySelector("#cartProducts");
-const total = document.querySelector("#total");
+const cartList = document.getElementById("cartList");
 
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cart =
+JSON.parse(localStorage.getItem("cart")) || [];
 
 
 
+if(cart.length === 0){
 
+    cartList.innerHTML = `
+    <p>
+    장바구니가 비어있습니다.
+    </p>
+    `;
 
-function showCart(){
+}else{
 
 
-    cartProducts.innerHTML = "";
+cart.forEach(id=>{
 
 
-    let sum = 0;
+db.collection("products")
+.doc(id)
+.get()
+.then(doc=>{
 
 
+let p = doc.data();
 
-    if(cart.length === 0){
 
 
-        cartProducts.innerHTML = `
+cartList.innerHTML += `
 
-        <p>
-        장바구니가 비어있습니다.
-        </p>
+<div class="product">
 
-        `;
 
+<img src="${p.image || 'https://via.placeholder.com/300'}">
 
-        total.innerHTML = 0;
 
+<div class="product-info">
 
-        return;
+<h3>
+${p.name}
+</h3>
 
 
-    }
+<p>
+${p.price}원
+</p>
 
 
+</div>
 
 
+</div>
 
 
-    cart.forEach((item,index)=>{
+`;
 
 
-        let count = item.count || 1;
+});
 
 
-        let price = Number(item.price);
-
-
-        sum += price * count;
-
-
-
-
-        cartProducts.innerHTML += `
-
-
-        <div class="card">
-
-
-            <img src="${item.image ||
-            'https://via.placeholder.com/300'}">
-
-
-
-            <div class="info">
-
-
-                <h3>
-
-                ${item.name}
-
-                </h3>
-
-
-
-
-                <div class="price">
-
-                ${price * count}원
-
-                </div>
-
-
-
-
-
-                <p>
-
-                사이즈:
-                ${item.selectedSize || ""}
-
-                </p>
-
-
-
-
-
-                <button onclick="changeCount(${index},-1)">
-
-                -
-
-                </button>
-
-
-
-                <span>
-
-                ${count}
-
-                </span>
-
-
-
-
-                <button onclick="changeCount(${index},1)">
-
-                +
-
-                </button>
-
-
-
-
-
-                <button class="buy"
-
-                onclick="removeCart(${index})">
-
-                삭제
-
-                </button>
-
-
-
-
-            </div>
-
-
-
-        </div>
-
-
-
-        `;
-
-
-
-    });
-
-
-
-
-
-    total.innerHTML = sum;
-
+});
 
 
 }
 
 
 
+document
+.getElementById("orderBtn")
+.onclick=()=>{
 
 
+alert("주문 기능 연결 예정");
 
 
-
-
-function changeCount(index,value){
-
-
-    cart[index].count =
-
-    (cart[index].count || 1)+value;
-
-
-
-    if(cart[index].count < 1){
-
-
-        cart[index].count = 1;
-
-
-    }
-
-
-
-    saveCart();
-
-
-}
-
-
-
-
-
-
-
-
-
-function removeCart(index){
-
-
-    cart.splice(index,1);
-
-
-    saveCart();
-
-
-}
-
-
-
-
-
-
-
-
-
-function saveCart(){
-
-
-    localStorage.setItem(
-
-        "cart",
-
-        JSON.stringify(cart)
-
-    );
-
-
-    showCart();
-
-
-}
-
-
-
-
-
-
-
-
-
-function buyAll(){
-
-
-
-    if(cart.length === 0){
-
-
-        alert("장바구니가 비어있습니다");
-
-
-        return;
-
-
-    }
-
-
-
-
-
-    let link = cart[0].link;
-
-
-
-    if(!link){
-
-
-        alert("구매 링크가 없습니다");
-
-
-        return;
-
-
-    }
-
-
-
-
-
-
-    let result = confirm(
-
-    "구매 페이지로 이동하시겠습니까?"
-
-    );
-
-
-
-
-    if(result){
-
-
-        location.href = link;
-
-
-    }
-
-
-
-}
-
-
-
-
-
-
-
-
-showCart();
+};
