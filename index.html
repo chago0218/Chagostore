@@ -4,49 +4,56 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>MY STORE</title>
+
+<title>My Store</title>
+
 
 <link rel="stylesheet" href="style.css">
 
+
 </head>
+
 
 
 <body>
 
 
+
 <header>
 
+
 <div class="logo">
+
 MY STORE
+
+</div>
+
+
+
+<div id="userArea">
+
 </div>
 
 
-<div class="menu">
-
-<button onclick="location.href='cart.html'">
-🛒
-</button>
-
-<button onclick="location.href='login.html'">
-로그인
-</button>
-
-</div>
 
 </header>
 
 
 
 
+
 <div class="search">
 
-<input 
-id="searchInput"
-placeholder="상품 검색">
+
+<input placeholder="상품 검색">
+
 
 </div>
+
+
 
 
 
@@ -54,13 +61,20 @@ placeholder="상품 검색">
 
 <section class="banner">
 
+
 <h1>
+
 NEW COLLECTION
+
 </h1>
 
+
 <p>
+
 새로운 상품을 만나보세요
+
 </p>
+
 
 </section>
 
@@ -68,23 +82,38 @@ NEW COLLECTION
 
 
 
+
+
 <div class="category">
 
-<button onclick="filterBrand('전체')">
+
+<button>
+
 전체
+
 </button>
 
-<button onclick="filterBrand('나이키')">
-나이키
+
+<button>
+
+의류
+
 </button>
 
-<button onclick="filterBrand('아디다스')">
-아디다스
+
+<button>
+
+신발
+
 </button>
 
-<button onclick="filterBrand('기타')">
-기타
+
+<button>
+
+액세서리
+
 </button>
+
 
 </div>
 
@@ -92,7 +121,10 @@ NEW COLLECTION
 
 
 
+
+
 <section class="products">
+
 
 </section>
 
@@ -101,14 +133,20 @@ NEW COLLECTION
 
 <div class="pagination">
 
+
 </div>
+
+
+
 
 
 
 
 <footer>
 
+
 MY STORE
+
 
 </footer>
 
@@ -117,16 +155,32 @@ MY STORE
 
 
 
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+
+
+
+
 <script src="firebase.js"></script>
+
+
+<script src="user.js"></script>
+
 
 <script src="index.js"></script>
 
 
+
+
+
 </body>
+
 
 </html>
