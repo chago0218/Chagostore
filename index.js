@@ -1,27 +1,21 @@
 const products = document.querySelector(".products");
 const pagination = document.querySelector(".pagination");
-const searchInput = document.querySelector("#searchInput");
 
 
 let allProducts = [];
-let displayProducts = [];
 
 let currentPage = 1;
 
 const productsPerPage = 12;
 
-let selectedBrand = "전체";
 
 
-
-// Firebase 상품 가져오기
+// 상품 불러오기
 
 db.collection("products")
 .get()
+
 .then((snapshot)=>{
-
-
-    allProducts = [];
 
 
     snapshot.forEach((doc)=>{
@@ -29,7 +23,7 @@ db.collection("products")
 
         allProducts.push({
 
-            id:doc.id,
+            id: doc.id,
 
             ...doc.data()
 
@@ -39,12 +33,19 @@ db.collection("products")
     });
 
 
-    displayProducts = allProducts;
-
 
     showProducts();
 
     createPagination();
+
+
+
+})
+
+.catch((error)=>{
+
+
+    console.log(error);
 
 
 });
@@ -53,71 +54,90 @@ db.collection("products")
 
 
 
-// 상품 출력
+
+
+
+// 상품 표시
 
 function showProducts(){
 
 
-    products.innerHTML="";
-
-
-    let start = (currentPage-1)*productsPerPage;
-
-    let end = start + productsPerPage;
-
-
-    let pageItems = displayProducts.slice(start,end);
+    products.innerHTML = "";
 
 
 
-    pageItems.forEach((data)=>{
+    let start = 
+    (currentPage - 1) * productsPerPage;
+
+
+
+    let end =
+    start + productsPerPage;
+
+
+
+    let pageProducts =
+    allProducts.slice(start,end);
+
+
+
+
+
+    pageProducts.forEach((data)=>{
+
 
 
         products.innerHTML += `
 
 
-        <div class="card">
+
+        <div class="card" 
+        onclick="openDetail('${data.id}')">
 
 
-            <img 
-            src="${data.image || 'https://via.placeholder.com/300'}"
-            onclick="openDetail('${data.id}')">
+
+            <img src="${
+            data.image || 
+            'https://via.placeholder.com/300'
+            }">
+
 
 
             <div class="info">
 
 
+
                 <h3>
+
                 ${data.name || "상품명 없음"}
+
                 </h3>
 
 
-                <p>
-                ${data.brand || ""}
-                </p>
-
 
                 <div class="price">
+
                 ${data.price || 0}원
+
                 </div>
 
 
-                <button 
-                class="buy"
-                onclick="addCart('${data.id}')">
 
-                장바구니
+                <p>
 
-                </button>
+                ${data.description || ""}
+
+                </p>
 
 
-                <button
-                class="buy"
-                onclick="buyProduct('${data.link || ""}')">
 
-                구매하기
+                <p>
 
-                </button>
+                사이즈:
+                ${data.size || ""}
+
+                </p>
+
 
 
             </div>
@@ -129,96 +149,11 @@ function showProducts(){
         `;
 
 
-    });
-
-
-}
-
-
-
-
-
-
-// 검색
-
-searchInput.addEventListener("input",()=>{
-
-
-    let value = searchInput.value;
-
-
-    displayProducts = allProducts.filter((item)=>{
-
-
-        return item.name
-        .toLowerCase()
-        .includes(value.toLowerCase());
-
 
     });
 
 
 
-    currentPage=1;
-
-    showProducts();
-
-    createPagination();
-
-
-});
-
-
-
-
-
-
-
-// 브랜드 필터
-
-function filterBrand(brand){
-
-
-    selectedBrand = brand;
-
-
-    if(brand==="전체"){
-
-
-        displayProducts = allProducts;
-
-
-    }
-
-    else if(brand==="기타"){
-
-
-        displayProducts = allProducts.filter(
-            item=> !item.brand
-        );
-
-
-    }
-
-    else{
-
-
-        displayProducts = allProducts.filter(
-            item=>item.brand===brand
-        );
-
-
-    }
-
-
-    currentPage=1;
-
-
-    showProducts();
-
-    createPagination();
-
-
 }
 
 
@@ -227,108 +162,31 @@ function filterBrand(brand){
 
 
 
-// 장바구니
-
-function addCart(id){
 
 
-    let cart =
-    JSON.parse(localStorage.getItem("cart"))
-    || [];
-
-
-    let product =
-    allProducts.find(
-        item=>item.id===id
-    );
-
-
-    cart.push(product);
-
-
-    localStorage.setItem(
-        "cart",
-        JSON.stringify(cart)
-    );
-
-
-    alert("장바구니 추가 완료");
-
-
-}
-
-
-
-
-
-
-
-// 구매
-
-function buyProduct(link){
-
-
-    if(link){
-
-
-        location.href=link;
-
-
-    }
-
-    else{
-
-
-        alert("구매 링크 없음");
-
-
-    }
-
-
-}
-
-
-
-
-
-
-
-// 상세페이지
-
-function openDetail(id){
-
-
-    location.href=
-    "detail.html?id="+id;
-
-
-}
-
-
-
-
-
-
-
-// 페이지 버튼
+// 페이지 버튼 생성
 
 function createPagination(){
 
 
-    pagination.innerHTML="";
+    pagination.innerHTML = "";
 
 
-    let count =
+
+    let pageCount = 
     Math.ceil(
-        displayProducts.length/productsPerPage
+    allProducts.length / productsPerPage
     );
 
 
 
-    for(let i=1;i<=count;i++){
+    for(let i=1; i<=pageCount; i++){
+
 
 
         pagination.innerHTML += `
+
+
 
         <button onclick="movePage(${i})">
 
@@ -336,7 +194,10 @@ function createPagination(){
 
         </button>
 
+
+
         `;
+
 
 
     }
@@ -350,13 +211,36 @@ function createPagination(){
 
 
 
+
+
+// 페이지 이동
+
 function movePage(page){
 
 
-    currentPage=page;
+    currentPage = page;
 
 
     showProducts();
+
+
+}
+
+
+
+
+
+
+
+
+
+// 상세페이지 이동
+
+function openDetail(id){
+
+
+    location.href =
+    "detail.html?id=" + id;
 
 
 }
