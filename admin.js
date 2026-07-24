@@ -5,6 +5,7 @@ button.addEventListener("click", function(){
     const name = document.querySelectorAll("input")[1].value;
     const price = Number(document.querySelectorAll("input")[2].value);
     const description = document.querySelector("textarea").value;
+    const image = document.querySelectorAll("input")[0].value;
     const size = document.querySelectorAll("input")[3].value;
 
     db.collection("products").add({
