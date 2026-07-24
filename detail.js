@@ -3,15 +3,12 @@ const detail = document.querySelector("#detail");
 
 const params = new URLSearchParams(location.search);
 
-
 const id = params.get("id");
-
 
 
 let productData = null;
 
 let selectedSize = "";
-
 
 
 
@@ -29,9 +26,7 @@ db.collection("products")
     if(!doc.exists){
 
 
-        detail.innerHTML =
-        "상품을 찾을 수 없습니다";
-
+        detail.innerHTML = "상품을 찾을 수 없습니다.";
 
         return;
 
@@ -42,11 +37,9 @@ db.collection("products")
 
     productData = {
 
-
-        id:doc.id,
+        id: doc.id,
 
         ...doc.data()
-
 
     };
 
@@ -62,21 +55,17 @@ db.collection("products")
 
 
 
-    detail.innerHTML = `
 
+    detail.innerHTML = `
 
 
     <div class="detail">
 
 
-
-        <img
-
+        <img 
         class="product-image"
-
-        src="${productData.image ||
+        src="${productData.image || 
         'https://via.placeholder.com/500'}">
-
 
 
 
@@ -91,6 +80,7 @@ db.collection("products")
             ${productData.brand || ""}
 
             </div>
+
 
 
 
@@ -115,9 +105,10 @@ db.collection("products")
 
 
 
+
             <div class="size-title">
 
-            사이즈
+            사이즈 선택
 
             </div>
 
@@ -131,11 +122,9 @@ db.collection("products")
             ${
             sizes.map((size)=>`
 
-            <button
-
+            <button 
             class="size-btn"
-
-            onclick="selectSize('${size}')">
+            onclick="selectSize('${size}',this)">
 
             ${size}
 
@@ -144,7 +133,6 @@ db.collection("products")
 
             `).join("")
             }
-
 
 
             </div>
@@ -156,18 +144,13 @@ db.collection("products")
 
             <div class="description">
 
-
             ${productData.description || ""}
-
 
             </div>
 
 
 
-
-
         </div>
-
 
 
     </div>
@@ -179,10 +162,9 @@ db.collection("products")
     <div class="bottom">
 
 
-        <button
 
+        <button 
         class="cart-btn"
-
         onclick="addCart()">
 
 
@@ -195,10 +177,8 @@ db.collection("products")
 
 
 
-        <button
-
+        <button 
         class="buy-btn"
-
         onclick="buyProduct()">
 
 
@@ -210,6 +190,7 @@ db.collection("products")
 
 
     </div>
+
 
 
     `;
@@ -230,15 +211,16 @@ db.collection("products")
 
 // 사이즈 선택
 
-function selectSize(size){
+function selectSize(size,button){
 
 
     selectedSize = size;
 
 
+
     document.querySelectorAll(".size-btn")
 
-    .forEach(btn=>{
+    .forEach((btn)=>{
 
 
         btn.style.background="white";
@@ -250,9 +232,10 @@ function selectSize(size){
 
 
 
-    event.target.style.background="black";
 
-    event.target.style.color="white";
+    button.style.background="black";
+
+    button.style.color="white";
 
 
 }
@@ -265,7 +248,9 @@ function selectSize(size){
 
 
 
-// 장바구니
+
+
+// 장바구니 추가
 
 function addCart(){
 
@@ -279,11 +264,14 @@ function addCart(){
 
 
 
+
     let exist = cart.find((item)=>{
 
 
         return item.id === productData.id
+
         &&
+
         item.selectedSize === selectedSize;
 
 
@@ -313,14 +301,15 @@ function addCart(){
 
             selectedSize:selectedSize,
 
+
             count:1
+
 
 
         });
 
 
     }
-
 
 
 
@@ -334,7 +323,6 @@ function addCart(){
         JSON.stringify(cart)
 
     );
-
 
 
 
@@ -374,7 +362,6 @@ function buyProduct(){
 
 
 
-
     if(!productData.link){
 
 
@@ -390,25 +377,16 @@ function buyProduct(){
 
 
 
-
-    let result = confirm(
-
-    "구매 페이지로 이동하시겠습니까?"
-
-    );
+    createOrder({
 
 
+        ...productData,
 
 
-
-    if(result){
-
-
-        location.href =
-        productData.link;
+        selectedSize:selectedSize
 
 
-    }
+    });
 
 
 
