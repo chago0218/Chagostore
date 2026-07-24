@@ -1,0 +1,153 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+
+body{
+
+    background:#f5f5f5;
+
+    padding:20px;
+
+}
+
+
+
+h1{
+
+    margin-bottom:20px;
+
+}
+
+
+
+.form{
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+
+
+
+input,
+textarea{
+
+    padding:14px;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+}
+
+
+
+
+textarea{
+
+    height:120px;
+
+}
+
+
+
+
+button{
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#000;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+
+
+
+
+#adminProducts{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:15px;
+
+    margin-top:20px;
+
+}
+
+
+
+
+.adminCard{
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:15px;
+
+}
+
+
+
+.adminCard img{
+
+    width:100%;
+
+    height:180px;
+
+    object-fit:cover;
+
+    border-radius:10px;
+
+}
+
+
+
+.adminCard button{
+
+    width:100%;
+
+    margin-top:8px;
+
+}
+
+
+
+
+@media(max-width:600px){
+
+
+    #adminProducts{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+
+}
