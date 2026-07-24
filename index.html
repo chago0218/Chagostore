@@ -6,9 +6,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>My Store</title>
+<title>MY STORE</title>
 
-<link rel="stylesheet" href="style.css?v=9999">
+<link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -22,37 +22,72 @@
 MY STORE
 </div>
 
+
+<div class="menu">
+
+<button onclick="location.href='cart.html'">
+🛒
+</button>
+
+<button onclick="location.href='login.html'">
+로그인
+</button>
+
+</div>
+
 </header>
+
 
 
 
 <div class="search">
 
-<input type="text" placeholder="상품 검색">
+<input 
+id="searchInput"
+placeholder="상품 검색">
 
 </div>
 
 
 
+
+
 <section class="banner">
 
-<h1>NEW COLLECTION</h1>
+<h1>
+NEW COLLECTION
+</h1>
 
-<p>새로운 상품을 만나보세요</p>
+<p>
+새로운 상품을 만나보세요
+</p>
 
 </section>
 
 
 
 
+
 <div class="category">
 
-<button>전체</button>
-<button>의류</button>
-<button>신발</button>
-<button>액세서리</button>
+<button onclick="filterBrand('전체')">
+전체
+</button>
+
+<button onclick="filterBrand('나이키')">
+나이키
+</button>
+
+<button onclick="filterBrand('아디다스')">
+아디다스
+</button>
+
+<button onclick="filterBrand('기타')">
+기타
+</button>
 
 </div>
+
 
 
 
@@ -60,6 +95,7 @@ MY STORE
 <section class="products">
 
 </section>
+
 
 
 
@@ -75,6 +111,7 @@ MY STORE
 MY STORE
 
 </footer>
+
 
 
 
