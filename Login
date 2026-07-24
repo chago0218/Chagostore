@@ -24,7 +24,7 @@
 로그인
 </button>
 
-
+<script src="login.js"></script>
 </body>
 
 </html>
