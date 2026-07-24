@@ -1,40 +1,54 @@
 const products = document.querySelector(".products");
 const pagination = document.querySelector(".pagination");
+const searchInput = document.querySelector("#searchInput");
+
 
 let allProducts = [];
+let displayProducts = [];
+
 let currentPage = 1;
 
 const productsPerPage = 12;
 
+let selectedBrand = "전체";
 
-// 상품 불러오기
+
+
+// Firebase 상품 가져오기
 
 db.collection("products")
 .get()
 .then((snapshot)=>{
 
+
     allProducts = [];
+
 
     snapshot.forEach((doc)=>{
 
+
         allProducts.push({
-            id: doc.id,
+
+            id:doc.id,
+
             ...doc.data()
+
         });
+
 
     });
 
 
+    displayProducts = allProducts;
+
+
     showProducts();
+
     createPagination();
 
 
-})
-.catch((error)=>{
-
-    console.log(error);
-
 });
+
 
 
 
@@ -43,19 +57,20 @@ db.collection("products")
 
 function showProducts(){
 
-    products.innerHTML = "";
+
+    products.innerHTML="";
 
 
-    const start = (currentPage - 1) * productsPerPage;
+    let start = (currentPage-1)*productsPerPage;
 
-    const end = start + productsPerPage;
-
-
-    const pageProducts = allProducts.slice(start,end);
+    let end = start + productsPerPage;
 
 
+    let pageItems = displayProducts.slice(start,end);
 
-    pageProducts.forEach((data)=>{
+
+
+    pageItems.forEach((data)=>{
 
 
         products.innerHTML += `
@@ -64,7 +79,9 @@ function showProducts(){
         <div class="card">
 
 
-            <img src="${data.image || 'https://via.placeholder.com/300'}">
+            <img 
+            src="${data.image || 'https://via.placeholder.com/300'}"
+            onclick="openDetail('${data.id}')">
 
 
             <div class="info">
@@ -75,28 +92,27 @@ function showProducts(){
                 </h3>
 
 
+                <p>
+                ${data.brand || ""}
+                </p>
+
+
                 <div class="price">
                 ${data.price || 0}원
                 </div>
 
 
-                <p>
-                ${data.description || ""}
-                </p>
+                <button 
+                class="buy"
+                onclick="addCart('${data.id}')">
+
+                장바구니
+
+                </button>
 
 
-                <p>
-                브랜드: ${data.brand || ""}
-                </p>
-
-
-                <p>
-                사이즈: ${data.size || ""}
-                </p>
-
-
-
-                <button class="buy"
+                <button
+                class="buy"
                 onclick="buyProduct('${data.link || ""}')">
 
                 구매하기
@@ -122,18 +138,149 @@ function showProducts(){
 
 
 
-// 구매 이동
+
+// 검색
+
+searchInput.addEventListener("input",()=>{
+
+
+    let value = searchInput.value;
+
+
+    displayProducts = allProducts.filter((item)=>{
+
+
+        return item.name
+        .toLowerCase()
+        .includes(value.toLowerCase());
+
+
+    });
+
+
+
+    currentPage=1;
+
+    showProducts();
+
+    createPagination();
+
+
+});
+
+
+
+
+
+
+
+// 브랜드 필터
+
+function filterBrand(brand){
+
+
+    selectedBrand = brand;
+
+
+    if(brand==="전체"){
+
+
+        displayProducts = allProducts;
+
+
+    }
+
+    else if(brand==="기타"){
+
+
+        displayProducts = allProducts.filter(
+            item=> !item.brand
+        );
+
+
+    }
+
+    else{
+
+
+        displayProducts = allProducts.filter(
+            item=>item.brand===brand
+        );
+
+
+    }
+
+
+    currentPage=1;
+
+
+    showProducts();
+
+    createPagination();
+
+
+}
+
+
+
+
+
+
+
+// 장바구니
+
+function addCart(id){
+
+
+    let cart =
+    JSON.parse(localStorage.getItem("cart"))
+    || [];
+
+
+    let product =
+    allProducts.find(
+        item=>item.id===id
+    );
+
+
+    cart.push(product);
+
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+
+    alert("장바구니 추가 완료");
+
+
+}
+
+
+
+
+
+
+
+// 구매
 
 function buyProduct(link){
 
 
     if(link){
 
-        location.href = link;
 
-    }else{
+        location.href=link;
 
-        alert("구매 링크가 없습니다.");
+
+    }
+
+    else{
+
+
+        alert("구매 링크 없음");
+
 
     }
 
@@ -144,30 +291,50 @@ function buyProduct(link){
 
 
 
-// 페이지 생성
+
+
+// 상세페이지
+
+function openDetail(id){
+
+
+    location.href=
+    "detail.html?id="+id;
+
+
+}
+
+
+
+
+
+
+
+// 페이지 버튼
 
 function createPagination(){
 
 
-    pagination.innerHTML = "";
+    pagination.innerHTML="";
 
 
-    const pageCount = Math.ceil(allProducts.length / productsPerPage);
+    let count =
+    Math.ceil(
+        displayProducts.length/productsPerPage
+    );
 
 
 
-    for(let i = 1; i <= pageCount; i++){
+    for(let i=1;i<=count;i++){
 
 
         pagination.innerHTML += `
-
 
         <button onclick="movePage(${i})">
 
         ${i}
 
         </button>
-
 
         `;
 
@@ -181,12 +348,13 @@ function createPagination(){
 
 
 
-// 페이지 이동
+
 
 function movePage(page){
 
 
-    currentPage = page;
+    currentPage=page;
+
 
     showProducts();
 
