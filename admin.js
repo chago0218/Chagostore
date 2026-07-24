@@ -9,6 +9,7 @@ button.addEventListener("click", function(){
     const size = document.querySelectorAll("input")[3].value;
 
     db.collection("products").add({
+        image: image,
         name: name,
         price: price,
         description: description,
