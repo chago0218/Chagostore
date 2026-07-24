@@ -1,9 +1,8 @@
 const detail = document.querySelector("#detail");
 
 
-// URL에서 상품 ID 가져오기
-
 const params = new URLSearchParams(location.search);
+
 
 const id = params.get("id");
 
@@ -12,6 +11,8 @@ const id = params.get("id");
 let productData = null;
 
 let selectedSize = "";
+
+
 
 
 
@@ -27,36 +28,62 @@ db.collection("products")
 
     if(!doc.exists){
 
-        detail.innerHTML = "상품을 찾을 수 없습니다.";
+
+        detail.innerHTML =
+        "상품을 찾을 수 없습니다";
+
 
         return;
+
 
     }
 
 
 
-    productData = doc.data();
+    productData = {
+
+
+        id:doc.id,
+
+        ...doc.data()
+
+
+    };
 
 
 
-    let sizes = productData.size 
+
+
+    let sizes = productData.size
     ? productData.size.split(",")
     : [];
+
+
 
 
 
     detail.innerHTML = `
 
 
+
     <div class="detail">
 
 
-        <img 
+
+        <img
+
         class="product-image"
-        src="${productData.image || 'https://via.placeholder.com/500'}">
+
+        src="${productData.image ||
+        'https://via.placeholder.com/500'}">
+
+
+
+
 
 
         <div class="info">
+
 
 
             <div class="brand">
@@ -67,11 +94,14 @@ db.collection("products")
 
 
 
-            <div class="name">
+
+            <h1 class="name">
 
             ${productData.name}
 
-            </div>
+            </h1>
+
+
 
 
 
@@ -84,32 +114,41 @@ db.collection("products")
 
 
 
+
             <div class="size-title">
 
-            사이즈 선택
+            사이즈
 
             </div>
+
+
+
 
 
             <div class="sizes">
 
 
             ${
-            sizes.map(size=>`
+            sizes.map((size)=>`
 
-            <button 
+            <button
+
             class="size-btn"
+
             onclick="selectSize('${size}')">
 
             ${size}
 
             </button>
 
+
             `).join("")
             }
 
 
+
             </div>
+
 
 
 
@@ -117,9 +156,13 @@ db.collection("products")
 
             <div class="description">
 
+
             ${productData.description || ""}
 
+
             </div>
+
+
 
 
 
@@ -131,26 +174,39 @@ db.collection("products")
 
 
 
+
+
     <div class="bottom">
 
 
-        <button 
+        <button
+
         class="cart-btn"
+
         onclick="addCart()">
+
 
         장바구니
 
+
         </button>
 
 
 
-        <button 
+
+
+        <button
+
         class="buy-btn"
+
         onclick="buyProduct()">
+
 
         구매하기
 
+
         </button>
+
 
 
     </div>
@@ -159,7 +215,12 @@ db.collection("products")
     `;
 
 
+
 });
+
+
+
+
 
 
 
@@ -175,10 +236,27 @@ function selectSize(size){
     selectedSize = size;
 
 
-    alert(size+" 선택");
+    document.querySelectorAll(".size-btn")
+
+    .forEach(btn=>{
+
+
+        btn.style.background="white";
+
+        btn.style.color="black";
+
+
+    });
+
+
+
+    event.target.style.background="black";
+
+    event.target.style.color="white";
 
 
 }
+
 
 
 
@@ -192,40 +270,83 @@ function selectSize(size){
 function addCart(){
 
 
-    let cart = 
+    let cart =
+
     JSON.parse(localStorage.getItem("cart"))
+
     || [];
 
 
 
-    let item = {
+
+    let exist = cart.find((item)=>{
 
 
-        ...productData,
+        return item.id === productData.id
+        &&
+        item.selectedSize === selectedSize;
 
 
-        selectedSize:selectedSize
-
-
-    };
+    });
 
 
 
-    cart.push(item);
+
+
+    if(exist){
+
+
+        exist.count =
+        (exist.count || 1)+1;
+
+
+    }
+
+    else{
+
+
+        cart.push({
+
+
+            ...productData,
+
+
+            selectedSize:selectedSize,
+
+            count:1
+
+
+        });
+
+
+    }
+
+
+
+
 
 
 
     localStorage.setItem(
+
         "cart",
+
         JSON.stringify(cart)
+
     );
 
 
 
-    alert("장바구니 추가 완료");
+
+
+    alert("장바구니에 추가되었습니다");
 
 
 }
+
+
+
+
 
 
 
@@ -238,18 +359,49 @@ function addCart(){
 function buyProduct(){
 
 
-    if(!selectedSize && productData.size){
+
+    if(productData.size && !selectedSize){
 
 
         alert("사이즈를 선택해주세요");
 
+
         return;
+
 
     }
 
 
 
-    if(productData.link){
+
+
+    if(!productData.link){
+
+
+        alert("구매 링크가 없습니다");
+
+
+        return;
+
+
+    }
+
+
+
+
+
+
+    let result = confirm(
+
+    "구매 페이지로 이동하시겠습니까?"
+
+    );
+
+
+
+
+
+    if(result){
 
 
         location.href =
@@ -258,13 +410,6 @@ function buyProduct(){
 
     }
 
-    else{
-
-
-        alert("구매 링크가 없습니다");
-
-
-    }
 
 
 }
