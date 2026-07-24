@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Store</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+MY STORE
+</div>
+
+</header>
+
+
+<div class="search">
+<input placeholder="상품 검색">
+</div>
+
+
+<section class="banner">
+
+<h1>NEW COLLECTION</h1>
+<p>새로운 상품을 만나보세요</p>
+
+</section>
+
+
+<div class="category">
+
+<button>전체</button>
+<button>의류</button>
+<button>신발</button>
+<button>액세서리</button>
+
+</div>
+
+
+<section class="products">
+
+
+<div class="card">
+
+<img src="https://via.placeholder.com/300">
+
+<div class="info">
+
+<h3>테스트 상품</h3>
+
+<div class="price">
+29,000원
+</div>
+
+<button class="buy">
+구매하기
+</button>
+
+</div>
+
+</div>
+
+
+</section>
+
+
+<footer>
+
+MY STORE
+
+</footer>
+
+
+</body>
+</html>
