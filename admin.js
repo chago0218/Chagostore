@@ -1,5 +1,5 @@
 // 관리자 이메일
-const adminEmail = "관리자이메일@gmail.com";
+const adminEmail = "kwonjeonghyunkjh0218@gmail.com";
 
 
 // 관리자 인증 확인
