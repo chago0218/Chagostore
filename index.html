@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 
 <head>
 
@@ -7,30 +7,36 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-<title>My Store</title>
-
+<title>CHAGO STORE</title>
 
 <link rel="stylesheet" href="style.css">
 
-
 </head>
-
 
 
 <body>
 
 
-
 <header>
 
-
 <div class="logo">
-
-MY STORE
-
+CHAGO STORE
 </div>
 
+
+<nav>
+
+<a href="index.html">
+홈
+</a>
+
+<a href="cart.html">
+🛒 장바구니
+</a>
+
+<a href="admin.html">
+관리자
+</a>
 
 
 <div id="userArea">
@@ -38,80 +44,51 @@ MY STORE
 </div>
 
 
+</nav>
+
 
 </header>
 
 
 
-
-
 <div class="search">
 
-
-<input placeholder="상품 검색">
-
+<input id="searchInput" placeholder="상품 검색">
 
 </div>
-
-
-
-
 
 
 
 <section class="banner">
 
-
 <h1>
-
 NEW COLLECTION
-
 </h1>
 
-
 <p>
-
 새로운 상품을 만나보세요
-
 </p>
 
-
 </section>
-
-
-
-
 
 
 
 <div class="category">
 
-
-<button>
-
+<button data-category="all">
 전체
-
 </button>
 
-
-<button>
-
+<button data-category="의류">
 의류
-
 </button>
 
-
-<button>
-
+<button data-category="신발">
 신발
-
 </button>
 
-
-<button>
-
+<button data-category="액세서리">
 액세서리
-
 </button>
 
 
@@ -120,67 +97,43 @@ NEW COLLECTION
 
 
 
-
-
-
-<section class="products">
-
+<section class="products" id="products">
 
 </section>
 
 
 
-
-<div class="pagination">
-
+<div class="pagination" id="pagination">
 
 </div>
 
 
 
-
-
-
-
 <footer>
 
-
-MY STORE
-
+CHAGO STORE
 
 </footer>
 
 
 
 
-
-
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
 
 
-
-
 <script src="firebase.js"></script>
 
-
 <script src="user.js"></script>
-
 
 <script src="index.js"></script>
 
 
 
-
-
 </body>
-
 
 </html>
