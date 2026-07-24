@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>관리자 페이지</title>
+
+</head>
+
+<body>
+
+<h1>관리자 상품 등록</h1>
+
+<h3>상품 사진</h3>
+<input type="file">
+
+
+<h3>상품명</h3>
+<input type="text" placeholder="상품 이름">
+
+
+<h3>가격</h3>
+<input type="number" placeholder="가격">
+
+
+<h3>상품 설명</h3>
+<textarea placeholder="상품 설명"></textarea>
+
+
+<h3>사이즈</h3>
+<input type="text" placeholder="예: S,M,L">
+
+
+<br><br>
+
+<button>
+상품 등록
+</button>
+
+
+</body>
+</html>
