@@ -18,16 +18,42 @@ function showCart(){
 
 
 
+    if(cart.length === 0){
+
+
+        cartProducts.innerHTML = `
+
+        <p>
+        장바구니가 비어있습니다.
+        </p>
+
+        `;
+
+
+        total.innerHTML = 0;
+
+
+        return;
+
+
+    }
+
+
+
+
+
+
     cart.forEach((item,index)=>{
-
-
-        let price = Number(item.price);
 
 
         let count = item.count || 1;
 
 
+        let price = Number(item.price);
+
+
         sum += price * count;
+
 
 
 
@@ -37,7 +63,7 @@ function showCart(){
         <div class="card">
 
 
-            <img src="${item.image || 
+            <img src="${item.image ||
             'https://via.placeholder.com/300'}">
 
 
@@ -53,11 +79,14 @@ function showCart(){
 
 
 
+
                 <div class="price">
 
                 ${price * count}원
 
                 </div>
+
+
 
 
 
@@ -71,9 +100,13 @@ function showCart(){
 
 
 
+
                 <button onclick="changeCount(${index},-1)">
+
                 -
+
                 </button>
+
 
 
                 <span>
@@ -83,14 +116,20 @@ function showCart(){
                 </span>
 
 
+
+
                 <button onclick="changeCount(${index},1)">
+
                 +
+
                 </button>
 
 
 
 
+
                 <button class="buy"
+
                 onclick="removeCart(${index})">
 
                 삭제
@@ -99,16 +138,22 @@ function showCart(){
 
 
 
+
             </div>
+
 
 
         </div>
 
 
+
         `;
 
 
+
     });
+
+
 
 
 
@@ -122,19 +167,24 @@ function showCart(){
 
 
 
-// 수량 변경
+
+
+
 
 function changeCount(index,value){
 
 
     cart[index].count =
-    (cart[index].count || 1) + value;
+
+    (cart[index].count || 1)+value;
 
 
 
-    if(cart[index].count <= 0){
+    if(cart[index].count < 1){
+
 
         cart[index].count = 1;
+
 
     }
 
@@ -142,13 +192,16 @@ function changeCount(index,value){
 
     saveCart();
 
+
 }
 
 
 
 
 
-// 삭제
+
+
+
 
 function removeCart(index){
 
@@ -164,14 +217,20 @@ function removeCart(index){
 
 
 
-// 저장
+
+
+
+
 
 function saveCart(){
 
 
     localStorage.setItem(
+
         "cart",
+
         JSON.stringify(cart)
+
     );
 
 
@@ -184,24 +243,72 @@ function saveCart(){
 
 
 
-// 구매
+
+
+
 
 function buyAll(){
 
 
+
     if(cart.length === 0){
+
 
         alert("장바구니가 비어있습니다");
 
+
         return;
+
 
     }
 
 
-    alert("구매 페이지로 이동합니다");
+
+
+
+    let link = cart[0].link;
+
+
+
+    if(!link){
+
+
+        alert("구매 링크가 없습니다");
+
+
+        return;
+
+
+    }
+
+
+
+
+
+
+    let result = confirm(
+
+    "구매 페이지로 이동하시겠습니까?"
+
+    );
+
+
+
+
+    if(result){
+
+
+        location.href = link;
+
+
+    }
+
 
 
 }
+
+
+
 
 
 
