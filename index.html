@@ -2,9 +2,7 @@
 <html lang="ko">
 
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>CHAGO STORE</title>
@@ -46,16 +44,9 @@ CHAGO STORE
 
 </nav>
 
-
 </header>
 
 
-
-<div class="search">
-
-<input id="searchInput" placeholder="상품 검색">
-
-</div>
 
 
 
@@ -73,21 +64,37 @@ NEW COLLECTION
 
 
 
+
+<div class="search">
+
+<input 
+id="searchInput"
+placeholder="상품 검색">
+
+</div>
+
+
+
+
 <div class="category">
 
-<button data-category="all">
+
+<button onclick="filterCategory('전체')">
 전체
 </button>
 
-<button data-category="의류">
+
+<button onclick="filterCategory('의류')">
 의류
 </button>
 
-<button data-category="신발">
+
+<button onclick="filterCategory('신발')">
 신발
 </button>
 
-<button data-category="액세서리">
+
+<button onclick="filterCategory('액세서리')">
 액세서리
 </button>
 
@@ -97,15 +104,10 @@ NEW COLLECTION
 
 
 
-<section class="products" id="products">
+<section id="products" class="products">
 
 </section>
 
-
-
-<div class="pagination" id="pagination">
-
-</div>
 
 
 
@@ -123,7 +125,6 @@ CHAGO STORE
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
 
 
 <script src="firebase.js"></script>
