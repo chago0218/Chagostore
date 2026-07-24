@@ -277,3 +277,11 @@ footer{
     height:160px !important;
     object-fit:cover !important;
 }
+.products {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+}
+
+.products .card {
+    width: 100% !important;
+}
