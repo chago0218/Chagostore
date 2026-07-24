@@ -53,10 +53,52 @@ MY STORE
 
 <div class="info">
 
-<h3>테스트 상품</h3>
+<h3>검은색 후드티</h3>
 
 <div class="price">
-29,000원
+49,000원
+</div>
+
+<button class="buy">
+구매하기
+</button>
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<img src="https://via.placeholder.com/300">
+
+<div class="info">
+
+<h3>화이트 스니커즈</h3>
+
+<div class="price">
+79,000원
+</div>
+
+<button class="buy">
+구매하기
+</button>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<img src="https://via.placeholder.com/300">
+
+<div class="info">
+
+<h3>가죽 가방</h3>
+
+<div class="price">
+59,000원
 </div>
 
 <button class="buy">
