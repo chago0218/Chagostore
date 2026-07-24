@@ -1,12 +1,21 @@
 const products = document.querySelector(".products");
 const pagination = document.querySelector(".pagination");
 
+const searchInput = document.querySelector(".search input");
+const categoryButtons = document.querySelectorAll(".category button");
+
 
 let allProducts = [];
+
+let filteredProducts = [];
 
 let currentPage = 1;
 
 const productsPerPage = 12;
+
+let currentCategory = "전체";
+
+
 
 
 
@@ -34,10 +43,12 @@ db.collection("products")
 
 
 
+    filteredProducts = allProducts;
+
+
     showProducts();
 
     createPagination();
-
 
 
 })
@@ -57,6 +68,7 @@ db.collection("products")
 
 
 
+
 // 상품 표시
 
 function showProducts(){
@@ -66,7 +78,7 @@ function showProducts(){
 
 
 
-    let start = 
+    let start =
     (currentPage - 1) * productsPerPage;
 
 
@@ -77,7 +89,7 @@ function showProducts(){
 
 
     let pageProducts =
-    allProducts.slice(start,end);
+    filteredProducts.slice(start,end);
 
 
 
@@ -86,25 +98,20 @@ function showProducts(){
     pageProducts.forEach((data)=>{
 
 
-
         products.innerHTML += `
 
 
-
-        <div class="card" 
+        <div class="card"
         onclick="openDetail('${data.id}')">
 
 
 
-            <img src="${
-            data.image || 
-            'https://via.placeholder.com/300'
-            }">
+            <img src="${data.image || 
+            'https://via.placeholder.com/300'}">
 
 
 
             <div class="info">
-
 
 
                 <h3>
@@ -131,23 +138,14 @@ function showProducts(){
 
 
 
-                <p>
-
-                사이즈:
-                ${data.size || ""}
-
-                </p>
-
-
-
             </div>
+
 
 
         </div>
 
 
         `;
-
 
 
     });
@@ -164,18 +162,16 @@ function showProducts(){
 
 
 
-// 페이지 버튼 생성
+// 페이지 생성
 
 function createPagination(){
 
 
-    pagination.innerHTML = "";
+    pagination.innerHTML="";
 
 
-
-    let pageCount = 
-    Math.ceil(
-    allProducts.length / productsPerPage
+    let pageCount = Math.ceil(
+        filteredProducts.length / productsPerPage
     );
 
 
@@ -183,9 +179,7 @@ function createPagination(){
     for(let i=1; i<=pageCount; i++){
 
 
-
         pagination.innerHTML += `
-
 
 
         <button onclick="movePage(${i})">
@@ -195,17 +189,13 @@ function createPagination(){
         </button>
 
 
-
         `;
-
 
 
     }
 
 
 }
-
-
 
 
 
@@ -244,3 +234,108 @@ function openDetail(id){
 
 
 }
+
+
+
+
+
+
+
+
+// 검색 기능
+
+searchInput.addEventListener("input",()=>{
+
+
+    let keyword =
+    searchInput.value.toLowerCase();
+
+
+
+    filteredProducts =
+    allProducts.filter((item)=>{
+
+
+        return item.name
+        .toLowerCase()
+        .includes(keyword);
+
+
+
+    });
+
+
+
+    currentPage = 1;
+
+
+    showProducts();
+
+    createPagination();
+
+
+
+});
+
+
+
+
+
+
+
+
+
+// 카테고리 기능
+
+categoryButtons.forEach((button)=>{
+
+
+    button.addEventListener("click",()=>{
+
+
+        currentCategory =
+        button.innerText;
+
+
+
+        if(currentCategory === "전체"){
+
+
+            filteredProducts =
+            allProducts;
+
+
+        }
+
+        else{
+
+
+            filteredProducts =
+            allProducts.filter((item)=>{
+
+
+                return item.category === currentCategory;
+
+
+            });
+
+
+
+        }
+
+
+
+        currentPage = 1;
+
+
+        showProducts();
+
+        createPagination();
+
+
+
+    });
+
+
+
+});
