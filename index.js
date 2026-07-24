@@ -1,12 +1,14 @@
 const products = document.querySelector(".products");
 
-db.collection("products").get().then((snapshot)=>{
+db.collection("products").get()
+.then((snapshot)=>{
 
     snapshot.forEach((doc)=>{
 
         const data = doc.data();
 
         products.innerHTML += `
+
         <div class="card">
 
             <img src="${data.image || 'https://via.placeholder.com/300'}">
@@ -20,11 +22,11 @@ db.collection("products").get().then((snapshot)=>{
                 </div>
 
                 <p>
-                    ${data.description}
+                    ${data.description || ""}
                 </p>
 
                 <p>
-                    사이즈: ${data.size}
+                    사이즈: ${data.size || ""}
                 </p>
 
                 <button class="buy">
@@ -34,8 +36,14 @@ db.collection("products").get().then((snapshot)=>{
             </div>
 
         </div>
+
         `;
 
     });
+
+})
+.catch((error)=>{
+
+    console.log(error);
 
 });
