@@ -1,62 +1,27 @@
-const products = document.querySelector(".products");
-const pagination = document.querySelector(".pagination");
-
-const searchInput = document.querySelector(".search input");
-const categoryButtons = document.querySelectorAll(".category button");
+const productsArea = document.getElementById("products");
 
 
-let allProducts = [];
-
-let filteredProducts = [];
-
-let currentPage = 1;
-
-const productsPerPage = 12;
-
-let currentCategory = "전체";
+let products = [];
 
 
-
-
-
-// 상품 불러오기
 
 db.collection("products")
 .get()
-
-.then((snapshot)=>{
-
-
-    snapshot.forEach((doc)=>{
+.then(snapshot=>{
 
 
-        allProducts.push({
+    snapshot.forEach(doc=>{
 
-            id: doc.id,
-
+        products.push({
+            id:doc.id,
             ...doc.data()
-
         });
 
 
     });
 
 
-
-    filteredProducts = allProducts;
-
-
-    showProducts();
-
-    createPagination();
-
-
-})
-
-.catch((error)=>{
-
-
-    console.log(error);
+    renderProducts(products);
 
 
 });
@@ -65,277 +30,83 @@ db.collection("products")
 
 
 
+function renderProducts(list){
 
 
+productsArea.innerHTML="";
 
 
-// 상품 표시
+list.forEach(product=>{
 
-function showProducts(){
 
+productsArea.innerHTML += `
 
-    products.innerHTML = "";
+<div class="product">
 
 
+<img src="${product.image || 'https://via.placeholder.com/300'}">
 
-    let start =
-    (currentPage - 1) * productsPerPage;
 
+<div class="product-info">
 
 
-    let end =
-    start + productsPerPage;
+<h3>
+${product.name}
+</h3>
 
 
+<div class="price">
+${product.price}원
+</div>
 
-    let pageProducts =
-    filteredProducts.slice(start,end);
 
 
+<button onclick="addCart('${product.id}')">
+장바구니 담기
+</button>
 
 
+<button onclick="location.href='detail.html?id=${product.id}'">
+상세보기
+</button>
 
-    pageProducts.forEach((data)=>{
 
+</div>
 
-        products.innerHTML += `
 
+</div>
 
-        <div class="card"
-        onclick="openDetail('${data.id}')">
-
-
-
-            <img src="${data.image || 
-            'https://via.placeholder.com/300'}">
-
-
-
-            <div class="info">
-
-
-                <h3>
-
-                ${data.name || "상품명 없음"}
-
-                </h3>
-
-
-
-                <div class="price">
-
-                ${data.price || 0}원
-
-                </div>
-
-
-
-                <p>
-
-                ${data.description || ""}
-
-                </p>
-
-
-
-            </div>
-
-
-
-        </div>
-
-
-        `;
-
-
-    });
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// 페이지 생성
-
-function createPagination(){
-
-
-    pagination.innerHTML="";
-
-
-    let pageCount = Math.ceil(
-        filteredProducts.length / productsPerPage
-    );
-
-
-
-    for(let i=1; i<=pageCount; i++){
-
-
-        pagination.innerHTML += `
-
-
-        <button onclick="movePage(${i})">
-
-        ${i}
-
-        </button>
-
-
-        `;
-
-
-    }
-
-
-}
-
-
-
-
-
-
-
-// 페이지 이동
-
-function movePage(page){
-
-
-    currentPage = page;
-
-
-    showProducts();
-
-
-}
-
-
-
-
-
-
-
-
-
-// 상세페이지 이동
-
-function openDetail(id){
-
-
-    location.href =
-    "detail.html?id=" + id;
-
-
-}
-
-
-
-
-
-
-
-
-// 검색 기능
-
-searchInput.addEventListener("input",()=>{
-
-
-    let keyword =
-    searchInput.value.toLowerCase();
-
-
-
-    filteredProducts =
-    allProducts.filter((item)=>{
-
-
-        return item.name
-        .toLowerCase()
-        .includes(keyword);
-
-
-
-    });
-
-
-
-    currentPage = 1;
-
-
-    showProducts();
-
-    createPagination();
-
+`;
 
 
 });
 
 
+}
 
 
 
 
+function addCart(id){
+
+
+let cart =
+JSON.parse(localStorage.getItem("cart")) || [];
 
 
 
-// 카테고리 기능
-
-categoryButtons.forEach((button)=>{
-
-
-    button.addEventListener("click",()=>{
-
-
-        currentCategory =
-        button.innerText;
+cart.push(id);
 
 
 
-        if(currentCategory === "전체"){
-
-
-            filteredProducts =
-            allProducts;
-
-
-        }
-
-        else{
-
-
-            filteredProducts =
-            allProducts.filter((item)=>{
-
-
-                return item.category === currentCategory;
-
-
-            });
+localStorage.setItem(
+"cart",
+JSON.stringify(cart)
+);
 
 
 
-        }
+alert("장바구니에 담았습니다");
 
 
-
-        currentPage = 1;
-
-
-        showProducts();
-
-        createPagination();
-
-
-
-    });
-
-
-
-});
+}
